@@ -1,37 +1,41 @@
 ﻿import { ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import theme from './themes/defaultTheme';
-import Home from './pages/Home/Home';
-import Login from './pages/Login/Login';
-import ChatBotDetail from './pages/ChatBotDetail/ChatBotDetail';
-import AuthGuard from './components/AuthGuard/AuthGuard';
+import LoginPage from './pages/Login/Login';
+import HomePage from './pages/Home/HomePage';
+import ChatBotDetailPage from './pages/ChatBotDetail/ChatBotDetail';
+import { LoadingProvider } from './utils/LoadingContext';
+import GlobalLoading from './components/GlobalLoading';
+import PrivateRoute from './components/PrivateRoute';
+import { SnackbarProvider } from 'notistack';
 
 function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <AuthGuard>
-                <Home />
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/chatbot/:id"
-            element={
-              <AuthGuard>
-                <ChatBotDetail />
-              </AuthGuard>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <LoadingProvider>
+                <SnackbarProvider maxSnack={3}>
+                    <Router>
+                        <Routes>
+                            <Route path="/login" element={<LoginPage />} />
+                            <Route
+                                path="/home"
+                                element={
+                                    <PrivateRoute element={<HomePage />} />
+                                }
+                            />
+                            <Route
+                                path="/chatbot/:id"
+                                element={
+                                    <PrivateRoute element={<ChatBotDetailPage />} />
+                                }
+                            />
+                        </Routes>
+                    </Router>
+                    <GlobalLoading />
+                </SnackbarProvider>
+            </LoadingProvider>
+        </ThemeProvider>
+    );
 }
 
 export default App;

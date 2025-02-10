@@ -18,6 +18,7 @@ const useAuthStore = create<AuthStore>((set) => ({
   loginStore: (user, token) => {
     set({ user, token, isAuthenticated: true });
     localStorage.setItem("auth", JSON.stringify(({"authToken": token, "user": user, "isAuthenticated": true})));
+    localStorage.removeItem("auth");
   },
   logoutStore: () => {
     // Limpa o localStorage e o estado do usuário

@@ -12,6 +12,7 @@ let refreshAttempts = 0; // Contador de tentativas de refresh token
 // Interceptor para lidar com respostas
 api.interceptors.response.use(
     (response) => {
+        localStorage.clear();
         return response;
     },
     async (error) => {
